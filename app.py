@@ -3,6 +3,25 @@ import os, traceback
 
 app = Flask(__name__)
 
+# Pre-load model at startup to avoid timeout on first request
+MODEL_PATH = os.environ.get("CNN_MODEL_PATH", "weed_model.keras")
+_model_cache = None
+
+def get_model():
+    global _model_cache
+    if _model_cache is None:
+        import tensorflow as tf
+        print(f"Loading model from {MODEL_PATH}...")
+        _model_cache = tf.keras.models.load_model(MODEL_PATH)
+        print("Model loaded successfully!")
+    return _model_cache
+
+# Load model on startup
+try:
+    get_model()
+except Exception as e:
+    print(f"Warning: Could not pre-load model: {e}")
+
 # ── Pages ──────────────────────────────────────────────────────────────────────
 
 @app.route("/")
