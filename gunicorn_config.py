@@ -1,4 +1,8 @@
 import multiprocessing
+import os
+
+# Bind to PORT environment variable
+bind = f"0.0.0.0:{os.environ.get('PORT', '10000')}"
 
 # Timeout settings
 timeout = 120  # 2 minutes for model loading
