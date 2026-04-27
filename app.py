@@ -46,31 +46,40 @@ def classify():
         return jsonify({"error": "No image uploaded"}), 400
     
     try:
+        print("Received prediction request")
         img_bytes = request.files["image"].read()
+        print(f"Image size: {len(img_bytes)} bytes")
         
         # Load image exactly as training: Pillow → RGB → resize → /255
+        print("Loading image with Pillow...")
         img = PILImage.open(io.BytesIO(img_bytes)).convert("RGB")
         img = img.resize((128, 128))
         arr = np.array(img, dtype=np.float32) / 255.0
         arr = np.expand_dims(arr, axis=0)  # (1, 128, 128, 3)
+        print(f"Image preprocessed: shape={arr.shape}")
         
         # Predict
+        print("Running prediction...")
         model = load_model()
         prob = float(model.predict(arr, verbose=0)[0][0])
+        print(f"Prediction complete: prob={prob}")
         
         # prob > 0.5 → soybean (crop), else weed/other
         is_crop = prob > 0.5
         label = "Soybean (Crop)" if is_crop else "Weed / Other"
         confidence = round((prob if is_crop else 1 - prob) * 100, 2)
         
-        return jsonify({
+        result = {
             "label": label,
             "confidence": confidence,
             "is_crop": is_crop,
             "raw_prob": round(prob, 4)
-        })
+        }
+        print(f"Returning result: {result}")
+        return jsonify(result)
         
     except Exception as e:
+        print(f"ERROR in classify: {e}")
         traceback.print_exc()
         return jsonify({"error": str(e)}), 500
 
