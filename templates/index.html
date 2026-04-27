@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>WeedSense — AI Weed Detection</title>
+  <link rel="icon" href="/static/favicon.ico" type="image/x-icon"/>
+  <link rel="stylesheet" href="/static/style.css"/>
+</head>
+<body class="landing-page">
+
+  <nav>
+    <div class="nav-logo">🌿 WeedSense</div>
+    <div class="nav-links">
+      <a href="/detect">Detect</a>
+      <a href="/info">Model Info</a>
+    </div>
+  </nav>
+
+  <section class="hero">
+    <div class="hero-content">
+      <span class="hero-tag">AI-Powered Precision Agriculture</span>
+      <h1>Detect Weeds.<br/>Protect Crops.</h1>
+      <p>Upload a soybean field image and let our CNN model instantly classify it as crop or weed with <strong>99.38% accuracy</strong>.</p>
+      <div class="hero-btns">
+        <a href="/detect" class="btn btn-primary">Try it now →</a>
+        <a href="/info" class="btn btn-outline">Model Info</a>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <div class="visual-card">
+        <div class="visual-row">
+          <div class="chip green">✓ Crop detected</div>
+          <div class="chip red">✗ Weed detected</div>
+        </div>
+        <div class="visual-grid">
+          <div class="vg-cell crop"></div>
+          <div class="vg-cell weed"></div>
+          <div class="vg-cell crop"></div>
+          <div class="vg-cell crop"></div>
+          <div class="vg-cell crop"></div>
+          <div class="vg-cell weed"></div>
+          <div class="vg-cell weed"></div>
+          <div class="vg-cell crop"></div>
+          <div class="vg-cell crop"></div>
+        </div>
+        <div class="visual-stats">
+          <div class="vs-item">
+            <span class="vs-num green">99.38%</span>
+            <span class="vs-label">Accuracy</span>
+          </div>
+          <div class="vs-divider"></div>
+          <div class="vs-item">
+            <span class="vs-num">15,336</span>
+            <span class="vs-label">Images trained</span>
+          </div>
+          <div class="vs-divider"></div>
+          <div class="vs-item">
+            <span class="vs-num">4</span>
+            <span class="vs-label">Classes</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <p>Copyright &copy; <span id="yr"></span> | Made with ❤️ by Saksham Gupta (RA2311003010525) &amp; Ayush Yadav (RA2311003010611)</p>
+  </footer>
+  <script>document.getElementById("yr").textContent = new Date().getFullYear();</script>
+</body>
+</html>

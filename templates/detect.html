@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Detect — WeedSense</title>
+  <link rel="icon" href="/static/favicon.ico" type="image/x-icon"/>
+  <link rel="stylesheet" href="/static/style.css"/>
+</head>
+<body class="detect-page">
+
+  <nav>
+    <div class="nav-logo"><a href="/">🌿 WeedSense</a></div>
+    <div class="nav-links">
+      <a href="/detect" class="active">Detect</a>
+      <a href="/info">Model Info</a>
+    </div>
+  </nav>
+
+  <main class="detect-main">
+
+    <!-- LEFT: upload -->
+    <div class="detect-left">
+      <h2>Upload Image</h2>
+      <div class="drop-zone" id="dropZone">
+        <div class="drop-inner" id="dropInner">
+          <div class="drop-icon">↑</div>
+          <p>Drag &amp; drop or <span class="link">browse</span></p>
+          <span class="drop-hint">JPG, PNG, TIF — any size</span>
+        </div>
+        <input type="file" id="fileInput" accept="image/*,.tif,.tiff" hidden/>
+        <img id="preview" alt="Preview"/>
+      </div>
+      <button class="btn btn-primary btn-full" id="btnRun">Run Detection</button>
+      <button class="btn btn-ghost btn-full" id="btnClear">Clear</button>
+    </div>
+
+    <!-- RIGHT: result -->
+    <div class="detect-right">
+      <h2>Result</h2>
+
+      <div class="result-empty" id="resultEmpty">
+        <div class="empty-inner">
+          <div class="empty-icon">🔍</div>
+          <p>Upload an image and click<br/><strong>Run Detection</strong></p>
+        </div>
+      </div>
+
+      <!-- Classification result -->
+      <div id="classResult" class="class-result-card" style="display:none">
+        <div class="result-top">
+          <span class="result-badge" id="labelBadge"></span>
+          <span class="result-conf" id="confText"></span>
+        </div>
+        <div class="progress-wrap">
+          <div class="progress-fill" id="progressBar"></div>
+        </div>
+        <p class="result-desc" id="resultDesc"></p>
+        <div class="result-meta" id="resultMeta"></div>
+      </div>
+
+      <div id="errorBox" class="error-box" style="display:none"></div>
+    </div>
+
+  </main>
+
+  <footer>
+    <p>Copyright &copy; <span id="yr"></span> | Made with ❤️ by Saksham Gupta (RA2311003010525) &amp; Ayush Yadav (RA2311003010611)</p>
+  </footer>
+
+  <script src="/static/script.js"></script>
+  <script>document.getElementById("yr").textContent = new Date().getFullYear();</script>
+</body>
+</html>

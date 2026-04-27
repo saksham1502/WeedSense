@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Model Info — WeedSense</title>
+  <link rel="icon" href="/static/favicon.ico" type="image/x-icon"/>
+  <link rel="stylesheet" href="/static/style.css"/>
+</head>
+<body class="info-page">
+
+  <nav>
+    <div class="nav-logo"><a href="/">🌿 WeedSense</a></div>
+    <div class="nav-links">
+      <a href="/detect">Detect</a>
+      <a href="/info" class="active">Model Info</a>
+    </div>
+  </nav>
+
+  <main class="info-main">
+
+    <div class="info-hero">
+      <h1>Model Info</h1>
+      <p>CNN binary classifier trained on the Weed Detection in Soybean Crops dataset.</p>
+    </div>
+
+    <!-- Live stats -->
+    <div class="stats-row">
+      <div class="stat-card">
+        <div class="stat-num green">99.38%</div>
+        <div class="stat-label">Validation Accuracy</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num">0.0142</div>
+        <div class="stat-label">Validation Loss</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num">11</div>
+        <div class="stat-label">Best Epoch</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num">3.3M</div>
+        <div class="stat-label">Parameters</div>
+      </div>
+    </div>
+
+    <!-- Architecture -->
+    <div class="info-card">
+      <div class="info-card-header">
+        <span class="info-badge blue">Architecture</span>
+        <h2>CNN Binary Classifier</h2>
+      </div>
+      <p>A convolutional neural network that classifies each image as <strong>Soybean (Crop)</strong> or <strong>Weed / Other</strong>. Trained end-to-end with binary cross-entropy loss.</p>
+
+      <div class="arch-flow">
+        <div class="arch-block">
+          Input<br/><span>128×128×3</span>
+        </div>
+        <div class="arch-arrow">→</div>
+        <div class="arch-block">
+          Conv2D + ReLU<br/><span>32 filters, 3×3</span>
+        </div>
+        <div class="arch-arrow">→</div>
+        <div class="arch-block">
+          MaxPool<br/><span>2×2</span>
+        </div>
+        <div class="arch-arrow">→</div>
+        <div class="arch-block">
+          Conv2D + ReLU<br/><span>64 filters, 3×3</span>
+        </div>
+        <div class="arch-arrow">→</div>
+        <div class="arch-block">
+          MaxPool<br/><span>2×2</span>
+        </div>
+        <div class="arch-arrow">→</div>
+        <div class="arch-block">
+          Conv2D + ReLU<br/><span>128 filters, 3×3</span>
+        </div>
+        <div class="arch-arrow">→</div>
+        <div class="arch-block">
+          MaxPool<br/><span>2×2</span>
+        </div>
+        <div class="arch-arrow">→</div>
+        <div class="arch-block">
+          Flatten<br/><span>25,088</span>
+        </div>
+        <div class="arch-arrow">→</div>
+        <div class="arch-block">
+          Dense + ReLU<br/><span>128 units</span>
+        </div>
+        <div class="arch-arrow">→</div>
+        <div class="arch-block">
+          Dropout<br/><span>0.3</span>
+        </div>
+        <div class="arch-arrow">→</div>
+        <div class="arch-block output">
+          Sigmoid<br/><span>1 output</span>
+        </div>
+      </div>
+
+      <div class="info-tags">
+        <span class="tag">Adam Optimizer</span>
+        <span class="tag">Binary Crossentropy</span>
+        <span class="tag">Dropout 0.3</span>
+        <span class="tag">EarlyStopping (patience=4)</span>
+        <span class="tag">ReduceLROnPlateau (patience=2)</span>
+        <span class="tag">Best epoch restored</span>
+      </div>
+    </div>
+
+    <!-- Training -->
+    <div class="info-card">
+      <div class="info-card-header">
+        <span class="info-badge green">Training</span>
+        <h2>Training Details</h2>
+      </div>
+      <p>Trained on CPU with TensorFlow 2.21 using a custom <code>tf.data</code> pipeline. Images loaded via Pillow to support <code>.tif</code> format, resized to 128×128 and normalized to [0,1].</p>
+
+      <div class="training-grid">
+        <div class="tg-row">
+          <span class="tg-key">Input size</span>
+          <span class="tg-val">128 × 128 × 3 (RGB)</span>
+        </div>
+        <div class="tg-row">
+          <span class="tg-key">Batch size</span>
+          <span class="tg-val">32</span>
+        </div>
+        <div class="tg-row">
+          <span class="tg-key">Max epochs</span>
+          <span class="tg-val">15 (stopped at 15, best=11)</span>
+        </div>
+        <div class="tg-row">
+          <span class="tg-key">Initial LR</span>
+          <span class="tg-val">0.001 → reduced to 0.00025</span>
+        </div>
+        <div class="tg-row">
+          <span class="tg-key">Augmentation</span>
+          <span class="tg-val">Flip LR, Flip UD, Random brightness</span>
+        </div>
+        <div class="tg-row">
+          <span class="tg-key">Train / Val split</span>
+          <span class="tg-val">80% / 20% (12,268 / 3,068)</span>
+        </div>
+        <div class="tg-row">
+          <span class="tg-key">Val accuracy</span>
+          <span class="tg-val highlight">99.38%</span>
+        </div>
+        <div class="tg-row">
+          <span class="tg-key">Val loss</span>
+          <span class="tg-val highlight">0.0142</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Dataset -->
+    <div class="info-card">
+      <div class="info-card-header">
+        <span class="info-badge yellow">Dataset</span>
+        <h2>Weed Detection in Soybean Crops</h2>
+      </div>
+      <p>Kaggle dataset (<code>fpeccia/weed-detection-in-soybean-crops</code>) containing field images across 4 classes. Soybean = Crop (label 1), all others = Weed/Other (label 0).</p>
+
+      <div class="stats-row mini">
+        <div class="stat-card">
+          <div class="stat-num green">7,376</div>
+          <div class="stat-label">Soybean (Crop)</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-num">3,520</div>
+          <div class="stat-label">Grass (Weed)</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-num">1,191</div>
+          <div class="stat-label">Broadleaf (Weed)</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-num">3,249</div>
+          <div class="stat-label">Soil (Other)</div>
+        </div>
+      </div>
+
+      <div class="info-tags" style="margin-top:1rem">
+        <span class="tag">15,336 total images</span>
+        <span class="tag">.tif format</span>
+        <span class="tag">Binary classification</span>
+        <span class="tag">Kaggle — fpeccia</span>
+      </div>
+    </div>
+
+  </main>
+
+  <footer>
+    <p>Copyright &copy; <span id="yr"></span> | Made with ❤️ by Saksham Gupta (RA2311003010525) &amp; Ayush Yadav (RA2311003010611)</p>
+  </footer>
+  <script>document.getElementById("yr").textContent = new Date().getFullYear();</script>
+</body>
+</html>
