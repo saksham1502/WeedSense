@@ -1,26 +1,28 @@
 from flask import Flask, request, jsonify, render_template
 import os, traceback
+import numpy as np
+from PIL import Image as PILImage
+import io
 
 app = Flask(__name__)
 
-# Pre-load model at startup to avoid timeout on first request
+# Pre-load model at startup
 MODEL_PATH = os.environ.get("CNN_MODEL_PATH", "weed_model.keras")
-_model_cache = None
+_model = None
 
-def get_model():
-    global _model_cache
-    if _model_cache is None:
+def load_model():
+    global _model
+    if _model is None:
         import tensorflow as tf
         print(f"Loading model from {MODEL_PATH}...")
-        _model_cache = tf.keras.models.load_model(MODEL_PATH)
+        _model = tf.keras.models.load_model(MODEL_PATH)
         print("Model loaded successfully!")
-    return _model_cache
+    return _model
 
-# Load model on startup
-try:
-    get_model()
-except Exception as e:
-    print(f"Warning: Could not pre-load model: {e}")
+# Load model immediately on import
+print("Initializing model...")
+load_model()
+print("Model ready!")
 
 # ── Pages ──────────────────────────────────────────────────────────────────────
 
@@ -42,14 +44,32 @@ def info():
 def classify():
     if "image" not in request.files:
         return jsonify({"error": "No image uploaded"}), 400
-    img_bytes  = request.files["image"].read()
-    model_path = os.environ.get("CNN_MODEL_PATH", "weed_model.keras")
+    
     try:
-        from model_utils import predict_classification
-        result = predict_classification(img_bytes, model_path)
-        return jsonify(result)
-    except FileNotFoundError:
-        return jsonify({"error": "Model file not found. Please train the model first (python train.py)"}), 500
+        img_bytes = request.files["image"].read()
+        
+        # Load image exactly as training: Pillow → RGB → resize → /255
+        img = PILImage.open(io.BytesIO(img_bytes)).convert("RGB")
+        img = img.resize((128, 128))
+        arr = np.array(img, dtype=np.float32) / 255.0
+        arr = np.expand_dims(arr, axis=0)  # (1, 128, 128, 3)
+        
+        # Predict
+        model = load_model()
+        prob = float(model.predict(arr, verbose=0)[0][0])
+        
+        # prob > 0.5 → soybean (crop), else weed/other
+        is_crop = prob > 0.5
+        label = "Soybean (Crop)" if is_crop else "Weed / Other"
+        confidence = round((prob if is_crop else 1 - prob) * 100, 2)
+        
+        return jsonify({
+            "label": label,
+            "confidence": confidence,
+            "is_crop": is_crop,
+            "raw_prob": round(prob, 4)
+        })
+        
     except Exception as e:
         traceback.print_exc()
         return jsonify({"error": str(e)}), 500
