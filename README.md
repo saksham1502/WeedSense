@@ -3,7 +3,6 @@
 ![Python](https://img.shields.io/badge/Python-3.8+-3776AB?style=flat&logo=python&logoColor=white)
 ![TensorFlow](https://img.shields.io/badge/TensorFlow-2.21-FF6F00?style=flat&logo=tensorflow&logoColor=white)
 ![Flask](https://img.shields.io/badge/Flask-3.1-000000?style=flat&logo=flask&logoColor=white)
-![License](https://img.shields.io/badge/License-MIT-green?style=flat)
 ![Accuracy](https://img.shields.io/badge/Accuracy-99.38%25-brightgreen?style=flat)
 
 **AI-powered weed detection system for precision agriculture** — Binary classification of soybean crops vs. weeds using deep learning.
